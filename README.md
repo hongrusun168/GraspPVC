@@ -21,7 +21,6 @@ conda activate simgrasp3
 requirements:
 
     - numpy 1.26.4 (numpy 库的版本一定维持在 2.0 版本以下,其他库的安装要以 numpy 库为基础)
-    
     - torch 2.5.0   -- mkl==2024.0.0(有时候会出现 import torch 报错问题,需要降低 mkl 库的版本)
     
     - pyaubo_sdk 0.26.0rc2
