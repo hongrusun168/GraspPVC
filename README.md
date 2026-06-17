@@ -1,9 +1,14 @@
-### 该代码仓库仅仅包含了通用抓取模型和在 Aubo 机械臂上的推理测试代码, 其中 Sim_GraspNet 中包含了网络模型和一些库的编译源码.
-### 在 SimGraspNetAubo 文件夹中,有结合 Mecheye 相机的推理代码文件 SimGrasp_Aubo_Mecheye.py;
-### 以及通过 ROS2 通信结合 Orbbec 相机的推理代码文件 SimGrasp_Aubo_Orbbec.py;
-### 新加上了结合 GCI 3D 相机的推理代码文件 SimGrasp_Server.py;
-### 其中基于 Mecheye 相机的推理代码比较完善,基于 Orbbec 相机的推理代码性能需要进一步优化.
-### GCI 3D 相机在 ubuntu 系统上的安装和使用都不完善,其公司只提供了一些 API 和一个简单的测试用例,实际上配置有非常多的坑
+ 该代码仓库仅仅包含了通用抓取模型和在 Aubo 机械臂上的推理测试代码, 其中 Sim_GraspNet 中包含了网络模型和一些库的编译源码.
+ 
+ 在 SimGraspNetAubo 文件夹中,有结合 Mecheye 相机的推理代码文件 SimGrasp_Aubo_Mecheye.py;
+ 
+ 以及通过 ROS2 通信结合 Orbbec 相机的推理代码文件 SimGrasp_Aubo_Orbbec.py;
+ 
+ 新加上了结合 GCI 3D 相机的推理代码文件 SimGrasp_Server.py;
+ 
+ 其中基于 Mecheye 相机的推理代码比较完善,基于 Orbbec 相机的推理代码性能需要进一步优化.
+ 
+ GCI 3D 相机在 ubuntu 系统上的安装和使用都不完善,其公司只提供了一些 API 和一个简单的测试用例,实际上配置有非常多的坑
 
 
 ## 环境配置
