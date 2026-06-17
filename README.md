@@ -21,52 +21,29 @@ conda activate simgrasp3
 requirements:
 
     - numpy 1.26.4 (numpy 库的版本一定维持在 2.0 版本以下,其他库的安装要以 numpy 库为基础)
-    - torch 2.5.0   -- mkl==2024.0.0(有时候会出现 import torch 报错问题,需要降低 mkl 库的版本)
-    
-    - pyaubo_sdk 0.26.0rc2
-    
-    - opencv-python 4.8.0.74 
-    
-    - open3d 0.18.0
-    
-    - scipy 1.15.3
-    
-    - matplotlib 3.10.8
-    
-    - h5py 3.15.1
-    
-    - scikit-learn 1.7.2
-    
-    - pointnet2._ext
-    
-        | -- cd ./Sim_GraspNet/pointnet2
-        
-        | -- python setup.py install
-        
-        | -- 编译之后，需要将路径 ./Sim_GraspNet/pointnet2/pointnet2 下的 *.so 编译文件复制到 ./Sim_GraspNet/pointnet2 路径下（有时候需要，具体视情况而定）
-        
-    - pn2_ext
-    
-        | -- cd ./Sim_GraspNet/models/sim_suction_model/utils/pn2_utils
-        
-        | -- python setup.py install
-        
-    - knn_pytorch
-    
-        | -- cd ./Sim_GraspNet/knn
-        
-        | -- python setup.py install
-        
-    - MecheyeAPI
-    
-        | -- 参考链接 https://github.com/MechMindRobotics/mecheye_python_samples/tree/master/area_scan_3d_camera
-        
-    - 如果需要使用 ROS2 连接 Orbbec 相机,需要在系统中安装 ros2
-    
-    - rclpy
-    
-    - OrbbecSDK_ROS2
-    
+    - torch 2.5.0   -- mkl==2024.0.0(有时候会出现 import torch 报错问题,需要降低 mkl 库的版本)    
+    - pyaubo_sdk 0.26.0rc2    
+    - opencv-python 4.8.0.74     
+    - open3d 0.18.0    
+    - scipy 1.15.3    
+    - matplotlib 3.10.8    
+    - h5py 3.15.1    
+    - scikit-learn 1.7.2    
+    - pointnet2._ext    
+        | -- cd ./Sim_GraspNet/pointnet2        
+        | -- python setup.py install        
+        | -- 编译之后，需要将路径 ./Sim_GraspNet/pointnet2/pointnet2 下的 *.so 编译文件复制到 ./Sim_GraspNet/pointnet2 路径下（有时候需要，具体视情况而定）        
+    - pn2_ext    
+        | -- cd ./Sim_GraspNet/models/sim_suction_model/utils/pn2_utils        
+        | -- python setup.py install        
+    - knn_pytorch    
+        | -- cd ./Sim_GraspNet/knn        
+        | -- python setup.py install        
+    - MecheyeAPI    
+        | -- 参考链接 https://github.com/MechMindRobotics/mecheye_python_samples/tree/master/area_scan_3d_camera        
+    - 如果需要使用 ROS2 连接 Orbbec 相机,需要在系统中安装 ros2    
+    - rclpy    
+    - OrbbecSDK_ROS2    
         | -- 参考链接 https://github.com/orbbec/OrbbecSDK_ROS2
 
 
