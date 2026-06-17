@@ -1,0 +1,47 @@
+{
+    "PVC_scene_range": [730, 1870, 40, 1700],
+    "PVC_pcd_range": [830, 1670, 200, 1400],
+
+    "CB_scene_range": [0, 2400, 0, 1800],
+    "CB_pcd_range": [250, 2250, 170, 1440],
+    
+
+    "camera_server_url": "http://127.0.0.1:5301",
+    "camera_params": "./params/camera_PVC.json",
+    "voxel_size": 0.002,
+    "simgrasp_checkpoint_path": "./weights/sim_grasp_epoch199.tar",
+    "robot_ip": "169.254.111.98",
+    "camera_ip": "169.254.5.111",
+    "robot_port": 30004,
+    "M_PI": 3.14159265358979323846,
+
+    "PVC_homePose": [-0.01145, -0.71082, 0.73372, -179.994, 0.001, -179.999],
+    "PVC_desPose": [1.12874, -0.55934, 0.45000, 179.993, -0.002, -179.993],
+
+    "CB_homePose": [0.14351, -0.70683, 0.73370, 180.00, 0.001, -179.992],
+    "CB_desPose": [1.15461, -0.00924, 0.45000, 179.993, -0.002, -179.993],
+
+    "PVC_image_visualize": 0,
+    "PVC_pcd_visualize": 0,
+    "PVC_Forcast_visualize": 0,
+    "PVC_collision_visualize": 0,
+    "PVC_Grasp_visualize": 0,
+    "PVC_score_threshold": 0.70,
+    "PVC_degree_threshold": 20,
+    "PVC_pose_xdelta": 0.002,
+    "PVC_pose_ydelta": -0.002,
+    "PVC_pose_distance": -0.36550,
+    "PVC_topk": 4,
+
+    "CB_image_visualize": 0,
+    "CB_pcd_visualize": 1,
+    "CB_Forcast_visualize": 0,
+    "CB_collision_visualize": 1,
+    "CB_Grasp_visualize": 1,
+    "CB_score_threshold": 0.60,                                                                                          
+    "CB_degree_threshold": 20,
+    "CB_pose_xdelta": 0.002,
+    "CB_pose_ydelta": -0.002,
+    "CB_pose_distance": -0.36025,
+    "CB_topk": 10
+}

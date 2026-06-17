@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package grasp;
+
+service GraspService {
+
+    // 1. zhua pvc paomian
+    // 2. zhua pvc 
+    // 3. zhua paomian
+    // #抓PVC和泡棉
+    rpc GraspPVCandEVA (DefaultRequest) returns (DefaultResponse);
+    // #单抓PVC
+    rpc GraspPVC (DefaultRequest) returns (DefaultResponse);
+    // #单抓泡棉
+    rpc GraspEVA (DefaultRequest) returns (DefaultResponse);
+    // 紧急停止
+    rpc EmergencyStop (DefaultRequest) returns (DefaultResponse);
+    // 回零
+    rpc ZeroBack (DefaultRequest) returns (DefaultResponse);
+}
+
+message DefaultRequest {
+    int32 defaultReq = 1;
+}
+
+message DefaultResponse {
+    int32 errorcode = 1;
+    string message = 2;
+}
+
