@@ -17,6 +17,16 @@ service GraspService {
     rpc EmergencyStop (DefaultRequest) returns (DefaultResponse);
     // 回零
     rpc ZeroBack (DefaultRequest) returns (DefaultResponse);
+    // 计算 PVC 上料途径点
+    rpc ProcessPVC (DefaultRequest) returns (DefaultResponse);
+    // 计算 EVA 上料途径点
+    rpc ProcessEVA (DefaultRequest) returns (DefaultResponse);
+    // 采集图像数据
+    rpc CaptureImage (DefaultRequest) returns (DefaultResponse);
+    // PVC 管上料
+    rpc LoadPVC (DefaultRequest) returns (DefaultResponse);
+    // EVA 管上料
+    rpc LoadEVA (DefaultRequest) returns (DefaultResponse);
 }
 
 message DefaultRequest {

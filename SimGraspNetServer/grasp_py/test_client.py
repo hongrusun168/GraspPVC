@@ -40,6 +40,7 @@ def test_client():
             # start_time = time.time()
             # print("测试 GraspPVCandEVA...")
             # response = stub.GraspPVCandEVA(grasp_pb2.DefaultRequest(defaultReq=1))
+            # response = stub.ZeroBack(grasp_pb2.DefaultRequest(defaultReq=1))
             # print(f'  Response: errorcode={response.errorcode}, message={response.message}')
             # end_time = time.time()
             # print("[INFO]: 抓取 EVA 和 PVC 管共花费 ", end_time - start_time, "s")
@@ -48,8 +49,13 @@ def test_client():
             # print("\n所有指令执行完毕!")
             # response = stub.ZeroBack(grasp_pb2.DefaultRequest(defaultReq=1))
 
-            # response = stub.EmergencyStop(grasp_pb2.DefaultRequest(defaultReq=1))
-
+            # response = stub.EmergencyStop(grasp_pb2.DefaultRequest(defaultReq=
+            # 
+            # 1))
+            # response = stub.CaptureImage(grasp_pb2.DefaultRequest(defaultReq=1))
+            # response = stub.ProcessPVC(grasp_pb2.DefaultRequest(defaultReq=1))
+            time.sleep(5)
+            response = stub.ZeroBack(grasp_pb2.DefaultRequest(defaultReq=1))
 
         except grpc.RpcError as e:
             print(f"\n[RPC 错误] 无法连接到服务器或调用失败: {e.code()}")
@@ -60,7 +66,7 @@ def test_client():
 
 if __name__ == '__main__':
     try:
-        for i in range(5):
+        for i in range(1):
             test_client()
     except KeyboardInterrupt:
         # 优雅处理 Ctrl+C

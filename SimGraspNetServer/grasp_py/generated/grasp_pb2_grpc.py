@@ -59,6 +59,31 @@ class GraspServiceStub(object):
                 request_serializer=grasp__pb2.DefaultRequest.SerializeToString,
                 response_deserializer=grasp__pb2.DefaultResponse.FromString,
                 _registered_method=True)
+        self.ProcessPVC = channel.unary_unary(
+                '/grasp.GraspService/ProcessPVC',
+                request_serializer=grasp__pb2.DefaultRequest.SerializeToString,
+                response_deserializer=grasp__pb2.DefaultResponse.FromString,
+                _registered_method=True)
+        self.ProcessEVA = channel.unary_unary(
+                '/grasp.GraspService/ProcessEVA',
+                request_serializer=grasp__pb2.DefaultRequest.SerializeToString,
+                response_deserializer=grasp__pb2.DefaultResponse.FromString,
+                _registered_method=True)
+        self.CaptureImage = channel.unary_unary(
+                '/grasp.GraspService/CaptureImage',
+                request_serializer=grasp__pb2.DefaultRequest.SerializeToString,
+                response_deserializer=grasp__pb2.DefaultResponse.FromString,
+                _registered_method=True)
+        self.LoadPVC = channel.unary_unary(
+                '/grasp.GraspService/LoadPVC',
+                request_serializer=grasp__pb2.DefaultRequest.SerializeToString,
+                response_deserializer=grasp__pb2.DefaultResponse.FromString,
+                _registered_method=True)
+        self.LoadEVA = channel.unary_unary(
+                '/grasp.GraspService/LoadEVA',
+                request_serializer=grasp__pb2.DefaultRequest.SerializeToString,
+                response_deserializer=grasp__pb2.DefaultResponse.FromString,
+                _registered_method=True)
 
 
 class GraspServiceServicer(object):
@@ -102,6 +127,41 @@ class GraspServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ProcessPVC(self, request, context):
+        """计算 PVC 上料途径点
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ProcessEVA(self, request, context):
+        """计算 EVA 上料途径点
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CaptureImage(self, request, context):
+        """采集图像数据
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def LoadPVC(self, request, context):
+        """PVC 管上料
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def LoadEVA(self, request, context):
+        """EVA 管上料
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GraspServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -127,6 +187,31 @@ def add_GraspServiceServicer_to_server(servicer, server):
             ),
             'ZeroBack': grpc.unary_unary_rpc_method_handler(
                     servicer.ZeroBack,
+                    request_deserializer=grasp__pb2.DefaultRequest.FromString,
+                    response_serializer=grasp__pb2.DefaultResponse.SerializeToString,
+            ),
+            'ProcessPVC': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessPVC,
+                    request_deserializer=grasp__pb2.DefaultRequest.FromString,
+                    response_serializer=grasp__pb2.DefaultResponse.SerializeToString,
+            ),
+            'ProcessEVA': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessEVA,
+                    request_deserializer=grasp__pb2.DefaultRequest.FromString,
+                    response_serializer=grasp__pb2.DefaultResponse.SerializeToString,
+            ),
+            'CaptureImage': grpc.unary_unary_rpc_method_handler(
+                    servicer.CaptureImage,
+                    request_deserializer=grasp__pb2.DefaultRequest.FromString,
+                    response_serializer=grasp__pb2.DefaultResponse.SerializeToString,
+            ),
+            'LoadPVC': grpc.unary_unary_rpc_method_handler(
+                    servicer.LoadPVC,
+                    request_deserializer=grasp__pb2.DefaultRequest.FromString,
+                    response_serializer=grasp__pb2.DefaultResponse.SerializeToString,
+            ),
+            'LoadEVA': grpc.unary_unary_rpc_method_handler(
+                    servicer.LoadEVA,
                     request_deserializer=grasp__pb2.DefaultRequest.FromString,
                     response_serializer=grasp__pb2.DefaultResponse.SerializeToString,
             ),
@@ -264,6 +349,141 @@ class GraspService(object):
             request,
             target,
             '/grasp.GraspService/ZeroBack',
+            grasp__pb2.DefaultRequest.SerializeToString,
+            grasp__pb2.DefaultResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ProcessPVC(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/grasp.GraspService/ProcessPVC',
+            grasp__pb2.DefaultRequest.SerializeToString,
+            grasp__pb2.DefaultResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ProcessEVA(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/grasp.GraspService/ProcessEVA',
+            grasp__pb2.DefaultRequest.SerializeToString,
+            grasp__pb2.DefaultResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CaptureImage(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/grasp.GraspService/CaptureImage',
+            grasp__pb2.DefaultRequest.SerializeToString,
+            grasp__pb2.DefaultResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def LoadPVC(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/grasp.GraspService/LoadPVC',
+            grasp__pb2.DefaultRequest.SerializeToString,
+            grasp__pb2.DefaultResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def LoadEVA(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/grasp.GraspService/LoadEVA',
             grasp__pb2.DefaultRequest.SerializeToString,
             grasp__pb2.DefaultResponse.FromString,
             options,

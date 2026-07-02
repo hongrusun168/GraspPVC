@@ -99,7 +99,7 @@ def visualize_plane(res):
 import copy # 引入 copy 库
 
 # --- 执行 ---
-res = fit_plane_base_frame("PVC_plane.ply")
+res = fit_plane_base_frame("eva_plane.ply")
 
 if res:
     A, B, C, D = res["equation"]

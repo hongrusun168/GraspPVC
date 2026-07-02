@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bgrasp.proto\x12\x05grasp\"$\n\x0e\x44\x65\x66\x61ultRequest\x12\x12\n\ndefaultReq\x18\x01 \x01(\x05\"5\n\x0f\x44\x65\x66\x61ultResponse\x12\x11\n\terrorcode\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t2\xc0\x02\n\x0cGraspService\x12?\n\x0eGraspPVCandEVA\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x39\n\x08GraspPVC\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x39\n\x08GraspEVA\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12>\n\rEmergencyStop\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x39\n\x08ZeroBack\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bgrasp.proto\x12\x05grasp\"$\n\x0e\x44\x65\x66\x61ultRequest\x12\x12\n\ndefaultReq\x18\x01 \x01(\x05\"5\n\x0f\x44\x65\x66\x61ultResponse\x12\x11\n\terrorcode\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t2\xed\x04\n\x0cGraspService\x12?\n\x0eGraspPVCandEVA\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x39\n\x08GraspPVC\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x39\n\x08GraspEVA\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12>\n\rEmergencyStop\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x39\n\x08ZeroBack\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12;\n\nProcessPVC\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12;\n\nProcessEVA\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12=\n\x0c\x43\x61ptureImage\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x38\n\x07LoadPVC\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponse\x12\x38\n\x07LoadEVA\x12\x15.grasp.DefaultRequest\x1a\x16.grasp.DefaultResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -36,5 +36,5 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_DEFAULTRESPONSE']._serialized_start=60
   _globals['_DEFAULTRESPONSE']._serialized_end=113
   _globals['_GRASPSERVICE']._serialized_start=116
-  _globals['_GRASPSERVICE']._serialized_end=436
+  _globals['_GRASPSERVICE']._serialized_end=737
 # @@protoc_insertion_point(module_scope)

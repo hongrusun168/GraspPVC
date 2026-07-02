@@ -135,8 +135,6 @@ def get_middle_pose(pose1, pose2):
     return np.concatenate([mid_pos, mid_rot]).tolist()
 
 
-
-
 def smooth_6dof_coupled_planner(waypoints, num_points=400):
     """
     耦合路径规划（全弧度制输入）
@@ -199,6 +197,7 @@ def smooth_6dof_coupled_planner(waypoints, num_points=400):
     # 合并 [x, y, z, rx, ry, rz] (全部为米和弧度)
     trajectory = np.hstack((interp_pos, np.array(interp_euler)))
     return trajectory
+
 
 def visualize_trajectory(trajectory, stride=20):
     """

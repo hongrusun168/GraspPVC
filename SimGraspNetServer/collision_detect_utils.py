@@ -97,27 +97,27 @@ class CollisionDetector():
     
     def detect_EVA(self, gg_array, visualize = False):
 
-        gripper = draw_gripper(width = 0.0190,                                              # 夹爪张开距离
+        gripper = draw_gripper(width = 0.0170,                                              # 夹爪张开距离
                                FINGER_WIDTH = 0.002,                                        # 夹爪的厚度，沿着 x 轴方向的夹爪大小
                                FINGER_HEIGHT = 0.025,                                       # 夹爪的宽度，沿着 y 轴方向的夹爪大小
                                FINGER_LENGTH = 0.100,                                       # 夹爪的长度，沿着 z 轴方向的夹爪大小
                                MIDDLE_WIDTH = 0.015,                                        # 中心接触手指的厚度
                                MIDDLE_HEIGHT = 0.025,                                       # 中心接触手指的宽度
                                MIDDLE_LENGTH = 0.010,                                       # 中心接触手指的长度
-                               MIDDLE_BEGIN_z = 0.0875,                                     # 中心接触手指的起始 z 点
+                               MIDDLE_BEGIN_z = 0.0880,                                     # 中心接触手指的起始 z 点
                                BASE_WIDTH = 0.050,                                          # 夹爪基部的厚度
                                BASE_HEIGHT = 0.020,                                         # 夹爪基部的宽度
                                BASE_LENGTH = 0.050)                                         # 夹爪基部的长度
 
         gripper_params = {
-            'width': 0.0190,                                    # 夹爪张开距离
+            'width': 0.0170,                                    # 夹爪张开距离
             'FINGER_WIDTH': 0.002,                              # 指厚 (X)
             'FINGER_HEIGHT': 0.025,                             # 指宽 (Y)
             'FINGER_LENGTH': 0.100,                             # 指长 (Z)
             'MIDDLE_WIDTH': 0.015,                              # 中间接触块厚度
             'MIDDLE_HEIGHT': 0.025,                             # 中间接触块宽度
             'MIDDLE_LENGTH': 0.010,                             # 中间接触块长度
-            'MIDDLE_OFFSET': 0.0875,                            # 中间接触块起始 Z
+            'MIDDLE_OFFSET': 0.0885,                            # 中间接触块起始 Z
             'BASE_WIDTH': 0.0500,                               # 基座厚度
             'BASE_HEIGHT': 0.020,                               # 基座宽度
             'BASE_LENGTH': 0.050,                               # 基座长度
@@ -128,9 +128,9 @@ class CollisionDetector():
             gg_array,                                           # 抓取姿态阵列
             gripper = gripper,                                  # 碰撞检测的夹爪模型
             **gripper_params,                                   # 解包几何参数
-            collision_point_threshold = 3,                      # 避障：超过此点数认为碰撞
-            min_points_per_region = 20,                         # 抓取：每个半区最少需要的点数
-            depth_scale = -0.003,                               # 内抓深度单位 1mm
+            collision_point_threshold = 5,                      # 避障：超过此点数认为碰撞
+            min_points_per_region = 25,                         # 抓取：每个半区最少需要的点数
+            depth_scale = -0.008,                               # 内抓深度单位 1mm
             visualize = visualize,                              # 是否可视化
         )
         return collision_results
@@ -170,8 +170,8 @@ class CollisionDetector():
             gripper = gripper,                                  # 碰撞检测的夹爪模型
             **gripper_params,                                   # 解包几何参数
             collision_point_threshold = 3,                      # 避障：超过此点数认为碰撞
-            min_points_per_region = 6,                         # 抓取：每个半区最少需要的点数
-            depth_scale = -0.001,                               # 内抓深度单位 1mm
+            min_points_per_region = 10,                         # 抓取：每个半区最少需要的点数
+            depth_scale = -0.003,                               # 内抓深度单位 1mm
             visualize = visualize,                              # 是否可视化
         )
 

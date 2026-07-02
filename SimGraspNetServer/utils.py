@@ -1,25 +1,51 @@
 """
 本脚本用于存放一些通用的工具函数
 """
-import os
 import cv2
 import copy
-import json
-import time
 import torch
-import warnings
 import numba as nb
 import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
-from scipy.spatial import cKDTree
-from scipy.interpolate import CubicSpline
-from scipy.spatial.transform import Rotation, Slerp
+from scipy.spatial.transform import Rotation
 
 
 device = torch.device("cuda" if torch.cuda.is_available() 
                    else "mps" if torch.backends.mps.is_available()
                    else "cpu")
+
+
+def is_same_pose(pose1, pose2, pos_thresh=0.005, rot_thresh=0.0035, is_gripper_symmetric=False):
+    # 1. 位置判断不变
+    t1 = np.array(pose1[0:3])
+    t2 = np.array(pose2[0:3])
+    pos_diff = np.linalg.norm(t1 - t2)
+    
+    if pos_diff > pos_thresh:
+        return False
+    
+    # 2. 姿态判断：【核心修改】将 from_rotvec 改为 from_euler
+    # 假设你的弧度数据是按 X-Y-Z 顺序的欧拉角 (Roll, Pitch, Yaw)
+    # 如果机械臂厂家定义的是其他顺序（如 ZYZ），请修改 'xyz' 字符串
+    r1 = Rotation.from_euler('xyz', pose1[3:6])
+    r2 = Rotation.from_euler('xyz', pose2[3:6])
+    
+    # 转换为四元数/矩阵后，从内在几何上计算最短转角
+    angle_diff = (r1.inv() * r2).magnitude() 
+    
+    # 3. 夹爪对称性处理（根据需要开启）
+    if is_gripper_symmetric:
+        angle_diff = angle_diff % np.pi
+        if angle_diff > np.pi / 2:
+            angle_diff = np.pi - angle_diff
+
+    if angle_diff > rot_thresh:
+        return False
+    
+    # print("angle_diff: ", angle_diff)
+    
+    return True
 
 
 def Visualize_Masked_Image(img, mask):
@@ -161,11 +187,9 @@ def collision_checker(pcd,
                       BASE_LENGTH = 0.060,
                       collision_point_threshold = 3,    
                       min_points_per_region = 15,       
-                      voxel_size = 0.005, 
                       depth_scale = -0.002, 
                       batch_size = 1024, 
-                      visualize = False, 
-                      show_num = 1, 
+                      visualize = False,  
                       device = 'cuda' if torch.cuda.is_available() else 'cpu'
                       ):
     
@@ -685,21 +709,63 @@ def adjust_gripper_orientation(Rx, Ry, Rz):
     return float(Rx_n), float(Ry_n), float(Rz_n)
 
 
-def rotate_grasp_matrix_90_deg(rotation_matrix):
-    """将抓取姿态的旋转矩阵沿着抓取法线旋转90度"""
+def rotate_grasp_matrix(rotation_matrix, angle_deg):
+    """
+    将抓取姿态的旋转矩阵沿着抓取法线旋转指定角度
+    
+    Args:
+        rotation_matrix: 3x3的旋转矩阵，第三列为抓取法线方向
+        angle_deg: 旋转角度（度），正值为逆时针旋转
+        
+    Returns:
+        旋转后的3x3旋转矩阵
+        
+    Raises:
+        ValueError: 当输入不是有效的3x3旋转矩阵时
+    """
+    # 输入验证
+    if rotation_matrix.shape != (3, 3):
+        raise ValueError("输入必须是3x3的矩阵")
+    
+    # 检查是否为有效的旋转矩阵（正交且行列式为1）
+    if not np.allclose(np.dot(rotation_matrix, rotation_matrix.T), np.eye(3), atol=1e-6):
+        raise ValueError("输入不是有效的旋转矩阵（非正交）")
+    if not np.allclose(np.linalg.det(rotation_matrix), 1.0, atol=1e-6):
+        raise ValueError("输入不是有效的旋转矩阵（行列式不为1）")
+    
+    # 提取抓取法线方向（第三列）
     grasp_normal = rotation_matrix[:, 2]
     
-    cos_theta = np.cos(np.pi / 2)
-    sin_theta = np.sin(np.pi / 2)
+    # 归一化法线向量（确保数值稳定性）
+    grasp_normal = grasp_normal / np.linalg.norm(grasp_normal)
     ux, uy, uz = grasp_normal
     
-    rotation_90_deg = np.array([
-        [cos_theta + ux**2 * (1 - cos_theta), ux * uy * (1 - cos_theta) - uz * sin_theta, ux * uz * (1 - cos_theta) + uy * sin_theta],
-        [uy * ux * (1 - cos_theta) + uz * sin_theta, cos_theta + uy**2 * (1 - cos_theta), uy * uz * (1 - cos_theta) - ux * sin_theta],
-        [uz * ux * (1 - cos_theta) - uy * sin_theta, uz * uy * (1 - cos_theta) + ux * sin_theta, cos_theta + uz**2 * (1 - cos_theta)]
+    # 将角度转换为弧度
+    theta = np.radians(angle_deg)
+    cos_theta = np.cos(theta)
+    sin_theta = np.sin(theta)
+    
+    # 使用罗德里格斯旋转公式: R = I + sin(θ)*[u]× + (1-cos(θ))*u⊗u
+    # 其中 [u]× 是叉积矩阵
+    rotation_around_normal = np.array([
+        [cos_theta + ux**2 * (1 - cos_theta), 
+         ux*uy*(1 - cos_theta) - uz*sin_theta, 
+         ux*uz*(1 - cos_theta) + uy*sin_theta],
+        [uy*ux*(1 - cos_theta) + uz*sin_theta, 
+         cos_theta + uy**2*(1 - cos_theta), 
+         uy*uz*(1 - cos_theta) - ux*sin_theta],
+        [uz*ux*(1 - cos_theta) - uy*sin_theta, 
+         uz*uy*(1 - cos_theta) + ux*sin_theta, 
+         cos_theta + uz**2*(1 - cos_theta)]
     ])
     
-    rotated_matrix = np.dot(rotation_90_deg, rotation_matrix)
+    # 应用旋转：新矩阵 = R_θ × R_original
+    rotated_matrix = np.dot(rotation_around_normal, rotation_matrix)
+    
+    # 数值修正：确保结果仍然是有效的旋转矩阵
+    U, _, Vt = np.linalg.svd(rotated_matrix)
+    rotated_matrix = np.dot(U, Vt)
+    
     return rotated_matrix
 
 
