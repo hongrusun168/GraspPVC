@@ -1,41 +1,49 @@
-### 该代码仓库仅仅包含了通用抓取模型和在 Aubo 机械臂上的推理测试代码, 其中 Sim_GraspNet 中包含了网络模型和一些库的编译源码.
-### 在 SimGraspNetAubo 文件夹中,有结合 Mecheye 相机的推理代码文件 SimGrasp_Aubo_Mecheye.py;
-### 以及通过 ROS2 通信结合 Orbbec 相机的推理代码文件 SimGrasp_Aubo_Orbbec.py;
-### 新加上了结合 GCI 3D 相机的推理代码文件 SimGrasp_Server.py;
-### 其中基于 Mecheye 相机的推理代码比较完善,基于 Orbbec 相机的推理代码性能需要进一步优化.
-### GCI 3D 相机在 ubuntu 系统上的安装和使用都不完善,其公司只提供了一些 API 和一个简单的测试用例,实际上配置有非常多的坑
+ 该代码仓库仅仅包含了通用抓取模型和在 Aubo 机械臂上的推理测试代码, 其中 Sim_GraspNet 中包含了网络模型和一些库的编译源码.
+ 
+ 在 SimGraspNetAubo 文件夹中,有结合 Mecheye 相机的推理代码文件 SimGrasp_Aubo_Mecheye.py;
+ 
+ 以及通过 ROS2 通信结合 Orbbec 相机的推理代码文件 SimGrasp_Aubo_Orbbec.py;
+ 
+ 新加上了结合 GCI 3D 相机的推理代码文件 SimGrasp_Server.py;
+ 
+ 其中基于 Mecheye 相机的推理代码比较完善,基于 Orbbec 相机的推理代码性能需要进一步优化.
+ 
+ GCI 3D 相机在 ubuntu 系统上的安装和使用都不完善,其公司只提供了一些 API 和一个简单的测试用例,实际上配置有非常多的坑
 
 
 ## 环境配置
 
 conda create -n simgrasp python=3.10
+
 conda activate simgrasp3
 
+
 requirements:
+
     - numpy 1.26.4 (numpy 库的版本一定维持在 2.0 版本以下,其他库的安装要以 numpy 库为基础)
-    - torch 2.5.0   -- mkl==2024.0.0(有时候会出现 import torch 报错问题,需要降低 mkl 库的版本)
-    - pyaubo_sdk 0.26.0rc2
-    - opencv-python 4.8.0.74 
-    - open3d 0.18.0
-    - scipy 1.15.3
-    - matplotlib 3.10.8
-    - h5py 3.15.1
-    - scikit-learn 1.7.2
-    - pointnet2._ext
-        | -- cd ./Sim_GraspNet/pointnet2
-        | -- python setup.py install
-        | -- 编译之后，需要将路径 ./Sim_GraspNet/pointnet2/pointnet2 下的 *.so 编译文件复制到 ./Sim_GraspNet/pointnet2 路径下（有时候需要，具体视情况而定）
-    - pn2_ext
-        | -- cd ./Sim_GraspNet/models/sim_suction_model/utils/pn2_utils
-        | -- python setup.py install
-    - knn_pytorch
-        | -- cd ./Sim_GraspNet/knn
-        | -- python setup.py install
-    - MecheyeAPI
-        | -- 参考链接 https://github.com/MechMindRobotics/mecheye_python_samples/tree/master/area_scan_3d_camera
-    - 如果需要使用 ROS2 连接 Orbbec 相机,需要在系统中安装 ros2
-    - rclpy
-    - OrbbecSDK_ROS2
+    - torch 2.5.0   -- mkl==2024.0.0(有时候会出现 import torch 报错问题,需要降低 mkl 库的版本)    
+    - pyaubo_sdk 0.26.0rc2    
+    - opencv-python 4.8.0.74     
+    - open3d 0.18.0    
+    - scipy 1.15.3    
+    - matplotlib 3.10.8    
+    - h5py 3.15.1    
+    - scikit-learn 1.7.2    
+    - pointnet2._ext    
+        | -- cd ./Sim_GraspNet/pointnet2        
+        | -- python setup.py install        
+        | -- 编译之后，需要将路径 ./Sim_GraspNet/pointnet2/pointnet2 下的 *.so 编译文件复制到 ./Sim_GraspNet/pointnet2 路径下（有时候需要，具体视情况而定）        
+    - pn2_ext    
+        | -- cd ./Sim_GraspNet/models/sim_suction_model/utils/pn2_utils        
+        | -- python setup.py install        
+    - knn_pytorch    
+        | -- cd ./Sim_GraspNet/knn        
+        | -- python setup.py install        
+    - MecheyeAPI    
+        | -- 参考链接 https://github.com/MechMindRobotics/mecheye_python_samples/tree/master/area_scan_3d_camera        
+    - 如果需要使用 ROS2 连接 Orbbec 相机,需要在系统中安装 ros2    
+    - rclpy    
+    - OrbbecSDK_ROS2    
         | -- 参考链接 https://github.com/orbbec/OrbbecSDK_ROS2
 
 
@@ -80,6 +88,3 @@ requirements:
         | -- weights                                                            // 存放无序抓取模型权重
         | -- grasp_py                                                           // 关于 gRPC 通信的实现细节
     | -- Sim_GraspNet                                                           // 存放关于模型框架的代码
-    ### 待解决问题
-    （1）代码过于凌乱，需要重新整理一下，尤其是对参数的输入进行整理，写入 config.json 文件中，便于调试         完成
-    （2）代码的命名规则需要修改，                                                                    完成
