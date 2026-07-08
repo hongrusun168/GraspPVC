@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\byd\\Desktop\\PVC_folder\\SimGrasp_PVC\\c\u002B\u002B\\GCI_Demo\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DB1CD30D-CCF1-4BFC-861B-2D5C8A18BAB9}|GCI_Demo\\GCI_Demo.vcxproj|C:\\Users\\byd\\Desktop\\PVC_folder\\SimGrasp_PVC\\c\u002B\u002B\\GCI_Demo\\GCI_Demo\\GCICppConsole.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{DB1CD30D-CCF1-4BFC-861B-2D5C8A18BAB9}|GCI_Demo\\GCI_Demo.vcxproj|solutionrelative:GCI_Demo\\GCICppConsole.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GCICppConsole.cpp",
+              "DocumentMoniker": "C:\\Users\\byd\\Desktop\\PVC_folder\\SimGrasp_PVC\\c\u002B\u002B\\GCI_Demo\\GCI_Demo\\GCICppConsole.cpp",
+              "RelativeDocumentMoniker": "GCI_Demo\\GCICppConsole.cpp",
+              "ToolTip": "C:\\Users\\byd\\Desktop\\PVC_folder\\SimGrasp_PVC\\c\u002B\u002B\\GCI_Demo\\GCI_Demo\\GCICppConsole.cpp",
+              "RelativeToolTip": "GCI_Demo\\GCICppConsole.cpp",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAACgAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-07-07T08:36:13.336Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

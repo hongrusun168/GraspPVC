@@ -43,26 +43,5 @@ class ConnectAndCaptureImages(object):                                          
             color_map = frame2d.get_color_image()
             img = color_map.data()
 
-            # 生成时间戳作为文件名
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 格式: 20260417_150530_123
-            
-            # 创建保存目录（如果不存在）
-            save_dir = "./captured_images"
-            PVC_dir = os.path.join(save_dir, "PVC")
-            EVA_dir = os.path.join(save_dir, "EVA")
-            os.makedirs(save_dir, exist_ok = True)
-            os.makedirs(PVC_dir, exist_ok = True)
-            os.makedirs(EVA_dir, exist_ok = True)
-            
-            # 保存 RGB 图像为 PNG
-            img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)  # 转换为BGR用于cv2保存
-            if which_side == "PVC":
-                img_path = os.path.join(PVC_dir, f"{timestamp}.png")
-
-            elif which_side == "EVA":
-                img_path = os.path.join(EVA_dir, f"{timestamp}.png")
-
-            cv2.imwrite(img_path, img_bgr)
-
         return img, depth_img
 

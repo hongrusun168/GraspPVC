@@ -1,0 +1,1 @@
+cl /EHsc /O2 /utf-8 capture_console.cpp /I".\04_GCI_SDK\C++SDK\include" /link ".\04_GCI_SDK\C++SDK\lib64\GC3D.lib" ".\04_GCI_SDK\C++SDK\lib64\GC3DAlgorithm.lib"

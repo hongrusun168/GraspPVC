@@ -192,6 +192,7 @@ class ConnectAndCaptureImages(object):
         return img, depth_img
 
 
+
 class RealTimeGraspDetector:
     def __init__(self) -> None:
         self._configs = "./params/configs.json"                                                     # 配置文件路径
@@ -223,20 +224,12 @@ class RealTimeGraspDetector:
         self._EVA_image_visualize = False                                                           # EVA 管图像 mask 可视化开关
         self._PVC_pcd_visualize = False                                                             # PVC 管点云可视化开关
         self._EVA_pcd_visualize = False                                                             # EVA 管点云可视化开关
-        self._PVC_Forcast_visualize = False                                                         # PVC 管抓取预测结果可视化开关
-        self._EVA_Forcast_visualize = False                                                         # EVA 管抓取预测结果可视化开关
         self._PVC_collision_visualize = False                                                       # PVC 管碰撞检测结果可视化开关
         self._EVA_collision_visualize = False                                                       # EVA 管碰撞检测结果可视化开关
         self._PVC_Grasp_visualize = False                                                           # PVC 管抓取位姿可视化开关
         self._EVA_Grasp_visualize = False                                                           # EVA 管抓取位姿可视化开关
-        self._PVC_score_threshold = None                                                            # PVC 管抓取评分过滤阈值
-        self._EVA_score_threshold = None                                                            # EVA 管抓取评分过滤阈值
-        self._PVC_degree_threshold = None                                                           # PVC 管抓取垂直度过滤阈值
-        self._EVA_degree_threshold = None                                                           # EVA 管抓取垂直度过滤阈值
         self._PVC_pose_distance = None                                                              # PVC 管抓取点位沿着抓取方向的平移距离
         self._EVA_pose_distance = None                                                              # EVA 管抓取点位沿着抓取方向的平移距离
-        self._PVC_topk = None                                                                       # PVC 管抓取预测 topk
-        self._EVA_topk = None                                                                       # EVA 管抓取预测 topk
         self._PVC_pose_xdelta = None                                                                # PVC 管抓取点位 x 轴方向偏移量
         self._PVC_pose_ydelta = None                                                                # PVC 管抓取点位 y 轴方向偏移量
         self._EVA_pose_xdelta = None                                                                # EVA 管抓取点位 x 轴方向偏移量
@@ -307,20 +300,12 @@ class RealTimeGraspDetector:
         self._EVA_image_visualize = params["EVA_image_visualize"]
         self._PVC_pcd_visualize = params["PVC_pcd_visualize"]
         self._EVA_pcd_visualize = params["EVA_pcd_visualize"]
-        self._PVC_Forcast_visualize = params["PVC_Forcast_visualize"]
-        self._EVA_Forcast_visualize = params["EVA_Forcast_visualize"]
         self._PVC_collision_visualize = params["PVC_collision_visualize"]
         self._EVA_collision_visualize = params["EVA_collision_visualize"]
         self._PVC_Grasp_visualize = params["PVC_Grasp_visualize"]
         self._EVA_Grasp_visualize = params["EVA_Grasp_visualize"]
-        self._PVC_score_threshold = params["PVC_score_threshold"]
-        self._EVA_score_threshold = params["EVA_score_threshold"]
-        self._PVC_degree_threshold = params["PVC_degree_threshold"]
-        self._EVA_degree_threshold = params["EVA_degree_threshold"]
         self._PVC_pose_distance = params["PVC_pose_distance"]
         self._EVA_pose_distance = params["EVA_pose_distance"]
-        self._PVC_topk = params["PVC_topk"]
-        self._EVA_topk = params["EVA_topk"]
         self._PVC_pose_xdelta = params["PVC_pose_xdelta"]
         self._PVC_pose_ydelta = params["PVC_pose_ydelta"]
         self._EVA_pose_xdelta = params["EVA_pose_xdelta"]
@@ -448,8 +433,6 @@ class RealTimeGraspDetector:
             PVC_pcd, _ = PVC_pcd.remove_statistical_outlier(nb_neighbors = 20, std_ratio = 2.0)
             plane_params = (0.004949, 0.014015, 0.999890, -0.210453)                                # 去除平面点云
             PVC_pcd = remove_floor_points(PVC_pcd, plane_params, threshold = 0.0050)
-            # filter_pointcloud_by_xy(scene_pcd, x_range = (-0.255000, 0.090000), y_range = (-0.973493, -0.550379), z_range = (-0.10, 0.30))
-            # filter_pointcloud_by_xy(PVC_pcd, z_range = (-0.10, 0.30))
             # o3d.io.write_point_cloud("pvc_plane.ply", scene_pcd)
 
             if len(scene_pcd.points) == 0 or len(PVC_pcd.points) < 5120:                            # 点云未空,提前结束
@@ -461,16 +444,10 @@ class RealTimeGraspDetector:
                 visualize_pcd(scene_pcd)
                 visualize_pcd(PVC_pcd)
 
-            # 抓取姿态预测
-            # gg_array = self._Forecast_Grasp(PVC_pcd, top_k = self._PVC_topk, which_side = "PVC", visualize = self._PVC_Forcast_visualize)
             gg_array = self.generate_poses_from_o3d_cloud(PVC_pcd, max_points = 5120, num_rotations = 18)
             # 抓取姿态后处理
-            gg_array = gg_array[gg_array[:, 0] > self._PVC_score_threshold]                         # 根据评分过滤抓取姿态
-            # gg_array = filter_vertical_grasps_simple(gg_array, max_angle_degrees = self._PVC_degree_threshold)
-                                                                                                    # 尽可能保证垂直抓取
             gg_array = self._Collsion_Detect(gg_array, "PVC", scene_pcd, visualize = self._PVC_collision_visualize)
                                                                                                     # 碰撞检测
-            
             # 保证存在可抓取姿态
             if len(gg_array) == 0:
                 print("[INFO]: PVC, 无有效抓取位姿,抓取失败")
@@ -531,8 +508,6 @@ class RealTimeGraspDetector:
             EVA_pcd, _ = EVA_pcd.remove_statistical_outlier(nb_neighbors = 20, std_ratio = 2.0)
             plane_params = (0.008391, 0.014485, 0.999860, -0.212847)
             EVA_pcd = remove_floor_points(EVA_pcd, plane_params, threshold = 0.0045)
-            # filter_pointcloud_by_xy(scene_pcd, x_range = (0.189594, 0.539492), y_range = (-0.971354, -0.553787),  z_range = (-0.10, 0.30))
-            # filter_pointcloud_by_xy(EVA_pcd, z_range = (-0.10, 0.30))
             # o3d.io.write_point_cloud("eva_plane.ply", scene_pcd)
             
             if self._EVA_pcd_visualize == True:                                                     # 可视化点云
@@ -545,12 +520,8 @@ class RealTimeGraspDetector:
             
             
             # 抓取姿态预测
-            # gg_array = self._Forecast_Grasp(EVA_pcd, top_k = self._EVA_topk, which_side = "EVA", visualize = self._EVA_Forcast_visualize)
             gg_array = self.generate_poses_from_o3d_cloud(EVA_pcd, max_points = 5120, num_rotations = 18)
             # 抓取姿态的后处理
-            gg_array = gg_array[gg_array[:, 0] > self._EVA_score_threshold]                         # 根据评分过滤抓取姿态
-            # gg_array = filter_vertical_grasps_simple(gg_array, max_angle_degrees = self._EVA_degree_threshold)
-                                                                                                    # 尽可能垂直向下抓取
             gg_array = self._Collsion_Detect(gg_array, "EVA", scene_pcd, visualize = self._EVA_collision_visualize)
                                                                                                     # 碰撞检测
 
@@ -615,7 +586,6 @@ class RealTimeGraspDetector:
             # 机械臂复位 ==========================================================================
             print("[INFO]: 机械臂运动到 PVC 管的预抓取点位 ......")
             tcp_pose = self._ARC._robot.getRobotState().getTcpPose()
-            print("[INFO]: TCP pose", tcp_pose)
             if is_same_pose(tcp_pose, self._PVC_homePose) == False:
                 mid_pos = get_middle_pose(tcp_pose, self._PVC_homePose)
                 mid_pos[2] += 0.10
@@ -1009,6 +979,32 @@ class RealTimeGraspDetector:
         self._EVA_pose3 = None
 
 
+    def _zero_back(self):
+        def _distance(pos1, pos2):
+            return math.sqrt((pos1[0]-pos2[0])**2 + (pos1[1]-pos2[1])**2 + (pos1[2]-pos2[2])**2)
+        tcp_pose = self._ARC._robot.getRobotState().getTcpPose()                                    # 获取机械臂当前 TCP 位姿
+
+        d_pvc = _distance(tcp_pose, self._PVC_waypoint)                                             # 计算当前点到 PVC 途径点的距离
+        d_eva = _distance(tcp_pose, self._EVA_waypoint)                                             # 计算当前点到 EVA 途径点的距离
+
+        des_pose = copy.deepcopy(tcp_pose)
+        des_pose[2] = self._PVC_waypoint[2]
+        if is_same_pose(tcp_pose, des_pose) == False:
+            mid_pos = get_middle_pose(tcp_pose, des_pose)
+            self._ARC.MoveC_to_Pose(mid_pos, des_pose)
+        
+        while(is_same_pose(tcp_pose, des_pose) == False):
+            tcp_pose = self._ARC._robot.getRobotState().getTcpPose()
+            time.sleep(0.01)
+
+        if d_pvc < d_eva:
+            self._Move_to_PVC_waypoint()
+        else:
+            self._Move_to_EVA_waypoint()
+
+
+
+
 grasp_detector = RealTimeGraspDetector()
 
 if __name__ == "__main__":
@@ -1017,7 +1013,7 @@ if __name__ == "__main__":
     # grasp_detector._Move_to_PVC_waypoint()
     # grasp_detector._Move_to_EVA_waypoint()
     # time.sleep(5.0)
-    for i in range(5):
+    for i in range(1):
         # start_time = time.time()
         start_time = time.time()
         errorcode, message = grasp_detector._Capture_image_and_depth()
@@ -1030,20 +1026,20 @@ if __name__ == "__main__":
         end_time = time.time()
         print("[INFO], 处理泡棉管时间: ", end_time - start_time)
 
-        start_time = time.time()
-        grasp_detector._Load_EVA()
-        end_time = time.time()
-        print("[INFO], 抓取泡棉管时间: ", end_time - start_time)
+        # start_time = time.time()
+        # grasp_detector._Load_EVA()
+        # end_time = time.time()
+        # print("[INFO], 抓取泡棉管时间: ", end_time - start_time)
 
         start_time = time.time()
         grasp_detector._Process_PVC()
         end_time = time.time()
         print("[INFO], 处理 PVC 管时间: ", end_time - start_time)
 
-        start_time = time.time()
-        grasp_detector._Load_PVC()
-        end_time = time.time()
-        print("[INFO], 抓取 PVC 管时间: ", end_time - start_time)
+        # start_time = time.time()
+        # grasp_detector._Load_PVC()
+        # end_time = time.time()
+        # print("[INFO], 抓取 PVC 管时间: ", end_time - start_time)
 
     #     end_time = time.time()
     #     print(f"[INFO]: 抓取检测执行时间: {end_time - start_time:.2f} 秒 \n")

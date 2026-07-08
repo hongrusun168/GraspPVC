@@ -11,7 +11,7 @@ class AuboRobotController:                                                      
         self._Connect_to_AuboArm()
         self._robot_name = self.robot_rpc_client.getRobotNames()[0]
         self._robot = self.robot_rpc_client.getRobotInterface(self._robot_name)
-        self._robot.getMotionControl().setSpeedFraction(0.50)
+        self._robot.getMotionControl().setSpeedFraction(0.60)
         
     
     def _Connect_to_AuboArm(self):

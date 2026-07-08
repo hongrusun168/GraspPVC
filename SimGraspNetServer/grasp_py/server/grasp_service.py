@@ -89,16 +89,12 @@ class RealTimeGraspDetector:
         self._EVA_image_visualize = False                                                           # EVA 管图像 mask 可视化开关
         self._PVC_pcd_visualize = False                                                             # PVC 管点云可视化开关
         self._EVA_pcd_visualize = False                                                             # EVA 管点云可视化开关
-        self._PVC_Forcast_visualize = False                                                         # PVC 管抓取预测结果可视化开关
-        self._EVA_Forcast_visualize = False                                                         # EVA 管抓取预测结果可视化开关
         self._PVC_collision_visualize = False                                                       # PVC 管碰撞检测结果可视化开关
         self._EVA_collision_visualize = False                                                       # EVA 管碰撞检测结果可视化开关
         self._PVC_Grasp_visualize = False                                                           # PVC 管抓取位姿可视化开关
         self._EVA_Grasp_visualize = False                                                           # EVA 管抓取位姿可视化开关
         self._PVC_score_threshold = None                                                            # PVC 管抓取评分过滤阈值
         self._EVA_score_threshold = None                                                            # EVA 管抓取评分过滤阈值
-        self._PVC_degree_threshold = None                                                           # PVC 管抓取垂直度过滤阈值
-        self._EVA_degree_threshold = None                                                           # EVA 管抓取垂直度过滤阈值
         self._PVC_pose_distance = None                                                              # PVC 管抓取点位沿着抓取方向的平移距离
         self._EVA_pose_distance = None                                                              # EVA 管抓取点位沿着抓取方向的平移距离
         self._PVC_topk = None                                                                       # PVC 管抓取预测 topk
@@ -173,16 +169,12 @@ class RealTimeGraspDetector:
         self._EVA_image_visualize = params["EVA_image_visualize"]
         self._PVC_pcd_visualize = params["PVC_pcd_visualize"]
         self._EVA_pcd_visualize = params["EVA_pcd_visualize"]
-        self._PVC_Forcast_visualize = params["PVC_Forcast_visualize"]
-        self._EVA_Forcast_visualize = params["EVA_Forcast_visualize"]
         self._PVC_collision_visualize = params["PVC_collision_visualize"]
         self._EVA_collision_visualize = params["EVA_collision_visualize"]
         self._PVC_Grasp_visualize = params["PVC_Grasp_visualize"]
         self._EVA_Grasp_visualize = params["EVA_Grasp_visualize"]
         self._PVC_score_threshold = params["PVC_score_threshold"]
         self._EVA_score_threshold = params["EVA_score_threshold"]
-        self._PVC_degree_threshold = params["PVC_degree_threshold"]
-        self._EVA_degree_threshold = params["EVA_degree_threshold"]
         self._PVC_pose_distance = params["PVC_pose_distance"]
         self._EVA_pose_distance = params["EVA_pose_distance"]
         self._PVC_topk = params["PVC_topk"]
@@ -314,8 +306,6 @@ class RealTimeGraspDetector:
             PVC_pcd, _ = PVC_pcd.remove_statistical_outlier(nb_neighbors = 20, std_ratio = 2.0)
             plane_params = (0.004949, 0.014015, 0.999890, -0.210453)                                # 去除平面点云
             PVC_pcd = remove_floor_points(PVC_pcd, plane_params, threshold = 0.0050)
-            # filter_pointcloud_by_xy(scene_pcd, x_range = (-0.255000, 0.090000), y_range = (-0.973493, -0.550379), z_range = (-0.10, 0.30))
-            # filter_pointcloud_by_xy(PVC_pcd, z_range = (-0.10, 0.30))
             # o3d.io.write_point_cloud("pvc_plane.ply", scene_pcd)
 
             if len(scene_pcd.points) == 0 or len(PVC_pcd.points) < 5120:                            # 点云未空,提前结束
@@ -327,16 +317,10 @@ class RealTimeGraspDetector:
                 visualize_pcd(scene_pcd)
                 visualize_pcd(PVC_pcd)
 
-            # 抓取姿态预测
-            # gg_array = self._Forecast_Grasp(PVC_pcd, top_k = self._PVC_topk, which_side = "PVC", visualize = self._PVC_Forcast_visualize)
             gg_array = self.generate_poses_from_o3d_cloud(PVC_pcd, max_points = 5120, num_rotations = 18)
             # 抓取姿态后处理
-            gg_array = gg_array[gg_array[:, 0] > self._PVC_score_threshold]                         # 根据评分过滤抓取姿态
-            # gg_array = filter_vertical_grasps_simple(gg_array, max_angle_degrees = self._PVC_degree_threshold)
-                                                                                                    # 尽可能保证垂直抓取
             gg_array = self._Collsion_Detect(gg_array, "PVC", scene_pcd, visualize = self._PVC_collision_visualize)
                                                                                                     # 碰撞检测
-            
             # 保证存在可抓取姿态
             if len(gg_array) == 0:
                 print("[INFO]: PVC, 无有效抓取位姿,抓取失败")
@@ -397,8 +381,6 @@ class RealTimeGraspDetector:
             EVA_pcd, _ = EVA_pcd.remove_statistical_outlier(nb_neighbors = 20, std_ratio = 2.0)
             plane_params = (0.008391, 0.014485, 0.999860, -0.212847)
             EVA_pcd = remove_floor_points(EVA_pcd, plane_params, threshold = 0.0045)
-            # filter_pointcloud_by_xy(scene_pcd, x_range = (0.189594, 0.539492), y_range = (-0.971354, -0.553787),  z_range = (-0.10, 0.30))
-            # filter_pointcloud_by_xy(EVA_pcd, z_range = (-0.10, 0.30))
             # o3d.io.write_point_cloud("eva_plane.ply", scene_pcd)
             
             if self._EVA_pcd_visualize == True:                                                     # 可视化点云
@@ -411,12 +393,8 @@ class RealTimeGraspDetector:
             
             
             # 抓取姿态预测
-            # gg_array = self._Forecast_Grasp(EVA_pcd, top_k = self._EVA_topk, which_side = "EVA", visualize = self._EVA_Forcast_visualize)
             gg_array = self.generate_poses_from_o3d_cloud(EVA_pcd, max_points = 5120, num_rotations = 18)
             # 抓取姿态的后处理
-            gg_array = gg_array[gg_array[:, 0] > self._EVA_score_threshold]                         # 根据评分过滤抓取姿态
-            # gg_array = filter_vertical_grasps_simple(gg_array, max_angle_degrees = self._EVA_degree_threshold)
-                                                                                                    # 尽可能垂直向下抓取
             gg_array = self._Collsion_Detect(gg_array, "EVA", scene_pcd, visualize = self._EVA_collision_visualize)
                                                                                                     # 碰撞检测
 
